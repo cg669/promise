@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        /***************************************寄生组合式继承******************************************/
+
+        //  组合继承 子类不是父类的实例
+
+
+        function inheritObject(o) {
+            function F() {}
+            // console.log(o)
+            F.prototype = o
+            return new F()
+        }
+
+        function inheritProperty(subClass, superClass) {
+            const p = inheritObject(superClass.prototype)
+            p.constructor = subClass
+            subClass.prototype = p
+        }
+
+        function SuperClass(name) {
+            this.name = name
+            this.books = [1, 2, 3]
+        }
+        SuperClass.prototype.getName = function () {
+            return this.name
+        }
+
+        function SubClass(name, id) {
+            SuperClass.call(this, name)
+            this.id = id
+        }
+
+        inheritProperty(SubClass, SuperClass)
+
+        SubClass.prototype.getId = function () {
+            return this.id
+        }
+
+        const instance1 = new SubClass('张三', 12)
+        const instance2 = new SubClass('李四', 22)
+
+        console.log(instance1, instance1.getName())
+        instance1.books.push(4)
+        console.log(instance2)
+
+        console.log(instance1 instanceof SuperClass)
+        console.log(instance1 instanceof SubClass)
+        console.log(SubClass.prototype instanceof SuperClass)
+        console.log(SubClass instanceof SuperClass)
+    </script>
+</body>
+
+</html>
